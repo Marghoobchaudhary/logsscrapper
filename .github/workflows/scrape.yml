@@ -1,17 +1,9 @@
-
----
-
-## 🔹 3. GitHub Actions Workflow
-
-Create `.github/workflows/scrape.yml`:
-
-```yaml
 name: Scrape Power BI Dashboard
 
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "30 */8 * * *"  # every 8 hours
+    - cron: "30 */8 * * *"  # every 8 hours (UTC)
 
 permissions:
   contents: write
@@ -37,7 +29,9 @@ jobs:
 
       - name: Run scraper
         env:
-          POWERBI_URL: ${{ secrets.POWERBI_URL || '' }}
+          # If you add a repo secret named POWERBI_URL, it will be used.
+          # Otherwise the script's default URL will be used.
+          POWERBI_URL: ${{ secrets.POWERBI_URL }}
           OUT_PATH: dashboard.json
         run: python scraper.py
 
