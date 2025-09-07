@@ -1,4 +1,4 @@
-name: Scrape Power BI Dashboard
+name: Scrape LOGS Report
 
 on:
   workflow_dispatch: {}
@@ -25,14 +25,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install playwright
           playwright install --with-deps chromium
 
       - name: Run scraper
         env:
-          # Leave POWERBI_URL unset if you want to use the default in scraper.py.
-          # To override, add a repo secret named POWERBI_URL and uncomment below:
-          # POWERBI_URL: ${{ secrets.POWERBI_URL }}
+          LOGS_PAGE_URL: https://www.logs.com/mo-sales-report.html
           OUT_PATH: dashboard.json
         run: python scraper.py
 
@@ -55,8 +53,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: debug-artifacts
-          path: |
-            artifacts/page.png
-            artifacts/page.html
-            artifacts/frame.html
+          path: artifacts/
           if-no-files-found: ignore
