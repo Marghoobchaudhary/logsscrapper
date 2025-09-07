@@ -1,0 +1,55 @@
+
+---
+
+## 🔹 3. GitHub Actions Workflow
+
+Create `.github/workflows/scrape.yml`:
+
+```yaml
+name: Scrape Power BI Dashboard
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "30 */8 * * *"  # every 8 hours
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run scraper
+        env:
+          POWERBI_URL: ${{ secrets.POWERBI_URL || '' }}
+          OUT_PATH: dashboard.json
+        run: python scraper.py
+
+      - name: Commit & push if changed
+        run: |
+          set -e
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add dashboard.json
+            git commit -m "chore: update dashboard.json [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
