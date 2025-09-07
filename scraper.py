@@ -2,18 +2,16 @@ import asyncio
 import json
 import os
 from pathlib import Path
-from playwright.async_api import async_playwright, TimeoutError as PWTimeout
+from playwright.async_api import async_playwright
 
-# ---- Config (with safe fallback if env is missing or empty)
-DEFAULT_POWERBI_URL = "https://app.powerbi.com/view?r=eyJrIjoiNTBhMGQ2ZGYtM2EwYS00NjAyLTk2M2UtMDBlYzY1YTdjNTdjIiwidCI6ImRmZmRlOTRmLTcyZmItNDlhZS1hY2IyLTBiOTYxYWJkNWI0MSIsImMiOjN9"
-URL = os.environ.get("POWERBI_URL") or DEFAULT_POWERBI_URL
+BASE_URL = os.environ.get(
+    "LOGS_PAGE_URL",
+    "https://www.logs.com/mo-sales-report.html"
+)
 OUT_PATH = os.environ.get("OUT_PATH", "dashboard.json")
 
 ARTIFACT_DIR = Path("artifacts")
 ARTIFACT_DIR.mkdir(exist_ok=True)
-
-LONG_TIMEOUT = 120_000  # 120 seconds
-
 
 async def scrape():
     async with async_playwright() as p:
@@ -21,93 +19,69 @@ async def scrape():
             headless=True,
             args=["--no-sandbox", "--disable-dev-shm-usage"]
         )
-        ctx = await browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (X11; Linux x86_64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/123 Safari/537.36"
-            )
-        )
-        page = await ctx.new_page()
-        page.set_default_timeout(LONG_TIMEOUT)
+        context = await browser.new_context()
+        page = await context.new_page()
+        await page.goto(BASE_URL, wait_until="domcontentloaded", timeout=120000)
 
-        try:
-            if not URL or not URL.startswith(("http://", "https://")):
-                raise ValueError(f"POWERBI_URL is invalid/empty: {URL!r}")
+        # Wait for iframe and extract src
+        iframe_el = page.locator("iframe").first
+        await iframe_el.wait_for(timeout=60000)
+        iframe_src = await iframe_el.get_attribute("src")
+        if not iframe_src:
+            raise RuntimeError("Could not find iframe src!")
 
-            # Power BI pages often keep background network activity.
-            await page.goto(URL, wait_until="domcontentloaded", timeout=LONG_TIMEOUT)
+        # Go to iframe directly
+        await page.goto(iframe_src, wait_until="domcontentloaded", timeout=120000)
+        await page.wait_for_timeout(10000)  # wait for table render
 
-            # The report is inside an iframe
-            iframe_locator = page.locator("iframe")
-            await iframe_locator.first.wait_for(timeout=LONG_TIMEOUT)
-            frame = await iframe_locator.first.content_frame()
-            if frame is None:
-                raise RuntimeError("Power BI iframe not found / not accessible")
+        rows = page.locator("div.mid-viewport div[role='row']")
+        row_count = await rows.count()
 
-            frame.set_default_timeout(LONG_TIMEOUT)
+        data = []
+        keys = [
+            "County", "Sale_date", "Sale_time", "FileNo",
+            "PropAddress", "PropCity", "OpeningBid",
+            "vendor", "status- DROP DOWN", "Foreclosure Status"
+        ]
 
-            # Wait for any ARIA table (Power BI exposes tables via roles)
-            await frame.locator('[role="table"]').first.wait_for(timeout=LONG_TIMEOUT)
+        for i in range(row_count):
+            row = rows.nth(i)
+            cells = row.locator("div[role='gridcell']")
+            cell_count = await cells.count()
 
-            # Extract all ARIA tables
-            all_data = []
-            tables = frame.locator('[role="table"]')
-            tcount = await tables.count()
+            # skip empty rows or header rows
+            if cell_count <= 1:
+                continue
 
-            for i in range(tcount):
-                tbl = tables.nth(i)
+            record = {
+                "Trustee": "LOGS.COM",
+                "Sale_date": "",
+                "Sale_time": "",
+                "FileNo": "",
+                "PropAddress": "",
+                "PropCity": "",
+                "PropZip": "",
+                "County": "",
+                "OpeningBid": "",
+                "vendor": "",
+                "status- DROP DOWN": "",
+                "Foreclosure Status": "",
+            }
 
-                # column headers
-                headers = []
-                header_cells = tbl.locator('[role="columnheader"]')
-                hcount = await header_cells.count()
-                for h in range(hcount):
-                    txt = (await header_cells.nth(h).inner_text()).strip()
-                    headers.append(txt)
+            # skip first cell (row index)
+            for idx in range(1, cell_count):
+                key_idx = idx - 1
+                if key_idx < len(keys):
+                    record[keys[key_idx]] = (await cells.nth(idx).inner_text()).strip()
 
-                # rows
-                rows = tbl.locator('[role="row"]')
-                rcount = await rows.count()
-                for r in range(rcount):
-                    row = rows.nth(r)
-                    # skip header rows that might also have role=row
-                    if await row.locator('[role="columnheader"]').count() > 0:
-                        continue
+            if record["FileNo"]:
+                data.append(record)
 
-                    cells = row.locator('[role="cell"]')
-                    ccount = await cells.count()
-                    values = []
-                    for c in range(ccount):
-                        values.append((await cells.nth(c).inner_text()).strip())
+        with open(OUT_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
 
-                    if not values:
-                        continue
-
-                    if headers and len(values) == len(headers):
-                        all_data.append(dict(zip(headers, values)))
-                    else:
-                        all_data.append({f"col_{j}": v for j, v in enumerate(values)})
-
-            with open(OUT_PATH, "w", encoding="utf-8") as f:
-                json.dump(all_data, f, indent=2, ensure_ascii=False)
-
-            print(f"Wrote {len(all_data)} records to {OUT_PATH}")
-
-        except Exception as e:
-            # Save artifacts for debugging
-            try:
-                await page.screenshot(path=str(ARTIFACT_DIR / "page.png"), full_page=True)
-                (ARTIFACT_DIR / "page.html").write_text(await page.content(), encoding="utf-8")
-                if 'frame' in locals() and frame:
-                    (ARTIFACT_DIR / "frame.html").write_text(await frame.content(), encoding="utf-8")
-            finally:
-                print(f"[ERROR] {type(e).__name__}: {e}")
-            raise
-        finally:
-            await ctx.close()
-            await browser.close()
-
+        print(f"Wrote {len(data)} records to {OUT_PATH}")
+        await browser.close()
 
 if __name__ == "__main__":
     asyncio.run(scrape())
