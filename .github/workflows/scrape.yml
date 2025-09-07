@@ -11,7 +11,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # give it enough time
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repo
@@ -30,7 +30,9 @@ jobs:
 
       - name: Run scraper
         env:
-          POWERBI_URL: ${{ secrets.POWERBI_URL }}
+          # Leave POWERBI_URL unset if you want to use the default in scraper.py.
+          # To override, add a repo secret named POWERBI_URL and uncomment below:
+          # POWERBI_URL: ${{ secrets.POWERBI_URL }}
           OUT_PATH: dashboard.json
         run: python scraper.py
 
