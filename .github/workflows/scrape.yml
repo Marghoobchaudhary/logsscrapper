@@ -11,6 +11,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # give it enough time
 
     steps:
       - name: Checkout repo
@@ -29,13 +30,12 @@ jobs:
 
       - name: Run scraper
         env:
-          # If you add a repo secret named POWERBI_URL, it will be used.
-          # Otherwise the script's default URL will be used.
           POWERBI_URL: ${{ secrets.POWERBI_URL }}
           OUT_PATH: dashboard.json
         run: python scraper.py
 
       - name: Commit & push if changed
+        if: success()
         run: |
           set -e
           if [[ -n "$(git status --porcelain)" ]]; then
@@ -47,3 +47,14 @@ jobs:
           else
             echo "No changes to commit."
           fi
+
+      - name: Upload debug artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-artifacts
+          path: |
+            artifacts/page.png
+            artifacts/page.html
+            artifacts/frame.html
+          if-no-files-found: ignore
