@@ -169,20 +169,6 @@
   },
   {
     "Trustee": "LOGS.COM",
-    "Sale_date": "9/16/25",
-    "Sale_time": "11:30 AM",
-    "FileNo": "25-040188",
-    "PropAddress": "732 East Culton Street",
-    "PropCity": "Warrensburg",
-    "PropZip": "",
-    "County": "Johnson",
-    "OpeningBid": "",
-    "vendor": "Auction.com",
-    "status- DROP DOWN": "Cancelled",
-    "Foreclosure Status": "On Hold"
-  },
-  {
-    "Trustee": "LOGS.COM",
     "Sale_date": "9/10/25",
     "Sale_time": "10:00 AM",
     "FileNo": "25-040275",
@@ -344,7 +330,7 @@
     "PropCity": "Saint Louis",
     "PropZip": "",
     "County": "Saint Louis",
-    "OpeningBid": "",
+    "OpeningBid": "$69,562.44",
     "vendor": "Auction.com",
     "status- DROP DOWN": "Cancelled",
     "Foreclosure Status": ""
@@ -386,7 +372,7 @@
     "PropCity": "Saint Louis",
     "PropZip": "",
     "County": "Saint Louis",
-    "OpeningBid": "",
+    "OpeningBid": "$69,562.44",
     "vendor": "Auction.com",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
