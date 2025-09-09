@@ -99,20 +99,6 @@
   },
   {
     "Trustee": "LOGS.COM",
-    "Sale_date": "9/8/25",
-    "Sale_time": "10:00 AM",
-    "FileNo": "25-040741",
-    "PropAddress": "517 Northwest Broadway Street",
-    "PropCity": "Grain Valley",
-    "PropZip": "",
-    "County": "Jackson",
-    "OpeningBid": "",
-    "vendor": "Auction.com",
-    "status- DROP DOWN": "Cancelled",
-    "Foreclosure Status": "On Hold"
-  },
-  {
-    "Trustee": "LOGS.COM",
     "Sale_date": "9/17/25",
     "Sale_time": "10:00 AM",
     "FileNo": "25-040741",
@@ -235,20 +221,6 @@
     "OpeningBid": "",
     "vendor": "Xome",
     "status- DROP DOWN": "",
-    "Foreclosure Status": ""
-  },
-  {
-    "Trustee": "LOGS.COM",
-    "Sale_date": "9/8/25",
-    "Sale_time": "10:00 AM",
-    "FileNo": "22-037354",
-    "PropAddress": "2920 Yale Blvd",
-    "PropCity": "Saint Charles",
-    "PropZip": "",
-    "County": "Saint Charles",
-    "OpeningBid": "",
-    "vendor": "Auction.com",
-    "status- DROP DOWN": "Cancelled",
     "Foreclosure Status": ""
   },
   {
