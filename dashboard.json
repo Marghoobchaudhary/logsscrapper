@@ -43,20 +43,6 @@
   },
   {
     "Trustee": "LOGS.COM",
-    "Sale_date": "9/9/25",
-    "Sale_time": "09:30 AM",
-    "FileNo": "25-040843",
-    "PropAddress": "4016 North Jackson Avenue",
-    "PropCity": "Kansas City",
-    "PropZip": "",
-    "County": "Clay",
-    "OpeningBid": "",
-    "vendor": "Xome",
-    "status- DROP DOWN": "Cancelled",
-    "Foreclosure Status": ""
-  },
-  {
-    "Trustee": "LOGS.COM",
     "Sale_date": "9/23/25",
     "Sale_time": "09:30 AM",
     "FileNo": "25-040762",
@@ -122,6 +108,20 @@
     "County": "Jackson",
     "OpeningBid": "",
     "vendor": "Xome.com",
+    "status- DROP DOWN": "",
+    "Foreclosure Status": ""
+  },
+  {
+    "Trustee": "LOGS.COM",
+    "Sale_date": "9/29/25",
+    "Sale_time": "10:00 AM",
+    "FileNo": "25-040832",
+    "PropAddress": "222 West Mill Street",
+    "PropCity": "Independence",
+    "PropZip": "",
+    "County": "Jackson",
+    "OpeningBid": "",
+    "vendor": "Auction.com",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
   },
