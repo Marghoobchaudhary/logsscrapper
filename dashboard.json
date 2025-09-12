@@ -15,6 +15,20 @@
   },
   {
     "Trustee": "LOGS.COM",
+    "Sale_date": "10/3/25",
+    "Sale_time": "10:00 AM",
+    "FileNo": "25-040906",
+    "PropAddress": "30035 Highway AB",
+    "PropCity": "Lincoln",
+    "PropZip": "",
+    "County": "Benton",
+    "OpeningBid": "",
+    "vendor": "Auction.com",
+    "status- DROP DOWN": "",
+    "Foreclosure Status": ""
+  },
+  {
+    "Trustee": "LOGS.COM",
     "Sale_date": "9/23/25",
     "Sale_time": "10:00 AM",
     "FileNo": "25-040860",
@@ -50,7 +64,7 @@
     "PropCity": "Liberty",
     "PropZip": "",
     "County": "Clay",
-    "OpeningBid": "",
+    "OpeningBid": "$151,290",
     "vendor": "Servicelink/Hudson & Marshall",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
@@ -64,7 +78,7 @@
     "PropCity": "Kansas City",
     "PropZip": "",
     "County": "Clay",
-    "OpeningBid": "",
+    "OpeningBid": "$200,970",
     "vendor": "Xome",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
@@ -141,6 +155,20 @@
   },
   {
     "Trustee": "LOGS.COM",
+    "Sale_date": "10/1/25",
+    "Sale_time": "10:00 AM",
+    "FileNo": "24-039783",
+    "PropAddress": "1335 East 109th Terrace",
+    "PropCity": "Kansas City",
+    "PropZip": "",
+    "County": "Jackson",
+    "OpeningBid": "",
+    "vendor": "Servicelink/Hudson & Marshall",
+    "status- DROP DOWN": "",
+    "Foreclosure Status": ""
+  },
+  {
+    "Trustee": "LOGS.COM",
     "Sale_date": "9/16/25",
     "Sale_time": "10:00 AM",
     "FileNo": "25-040632",
@@ -162,7 +190,7 @@
     "PropCity": "De Soto",
     "PropZip": "",
     "County": "Jefferson",
-    "OpeningBid": "",
+    "OpeningBid": "$46,992.33",
     "vendor": "",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
@@ -232,7 +260,7 @@
     "PropCity": "Waynesville",
     "PropZip": "",
     "County": "Pulaski",
-    "OpeningBid": "",
+    "OpeningBid": "$112,171.72",
     "vendor": "Xome",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
@@ -379,6 +407,20 @@
   },
   {
     "Trustee": "LOGS.COM",
+    "Sale_date": "10/1/25",
+    "Sale_time": "09:30 AM",
+    "FileNo": "25-040820",
+    "PropAddress": "4212 Stanmoor Drive",
+    "PropCity": "Saint Louis",
+    "PropZip": "",
+    "County": "Saint Louis",
+    "OpeningBid": "$240,762.54",
+    "vendor": "",
+    "status- DROP DOWN": "",
+    "Foreclosure Status": ""
+  },
+  {
+    "Trustee": "LOGS.COM",
     "Sale_date": "9/17/25",
     "Sale_time": "11:00 AM",
     "FileNo": "24-039892",
@@ -388,6 +430,20 @@
     "County": "Saint Louis City",
     "OpeningBid": "",
     "vendor": "Auction.com",
+    "status- DROP DOWN": "",
+    "Foreclosure Status": ""
+  },
+  {
+    "Trustee": "LOGS.COM",
+    "Sale_date": "10/1/25",
+    "Sale_time": "11:00 AM",
+    "FileNo": "25-040846",
+    "PropAddress": "5066 Davison Avenue",
+    "PropCity": "Saint Louis",
+    "PropZip": "",
+    "County": "Saint Louis City",
+    "OpeningBid": "$112,665.43",
+    "vendor": "",
     "status- DROP DOWN": "",
     "Foreclosure Status": ""
   }
